@@ -2,3 +2,7 @@
 .result-label {
   border-left-color: #009688;
 }
+
+i.material-icons {
+  color: gold;
+}
