@@ -1,0 +1,21 @@
+{
+  "name": "searchapp",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Michael Jay Braga <majcbraga@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/michaelbraga/searchApp",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "materialize": "^0.98.1"
+  }
+}
