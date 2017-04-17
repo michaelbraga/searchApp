@@ -7,7 +7,10 @@
   SearchCtrl.$inject = ['$scope', '$window', '$timeout', '$filter', '$sce', '$log', 'SearchSrvc'];
 
   function SearchCtrl($scope, $window, $timeout, $filter, $sce, $log, SearchSrvc) {
+    angular.element('.dropdown-button').dropdown();
+
     $scope.results = [];
+    let orig = [];
 
     $scope.SearchTerm = function (query) {
       $scope.displayResults = false;
@@ -15,6 +18,7 @@
       SearchSrvc.Search(query)
         .then(function (results) {
           $scope.results = results;
+          orig = results;
           $timeout(function () {
             $scope.desc = true;
             $scope.displayResults = true;
@@ -42,6 +46,14 @@
       let args = ($scope.desc)? '-rating': 'rating';
       $scope.results = $filter('orderBy')($scope.results, args);
       $scope.desc = !$scope.desc;
+    }
+
+    $scope.filterByRating = function (rate) {
+      $scope.results = $filter('filter')(orig, {'rating':rate});
+    }
+
+    $scope.clear = function () {
+      $scope.results = orig;
     }
   }
 

@@ -59,9 +59,54 @@
       <blockquote class="result-label">
         <h6 class="small">About {{results.length}} result(s) for <strong>{{input}}</strong></h6>
       </blockquote>
-      <a class="waves-effect waves-teal btn-flat" ng-init="desc=true" ng-click="sortByRating()">
-        Rating <i class="material-icons right">swap_vert</i>
-      </a>
+      <div class="row">
+        <div class="col s6 left-align">
+          <a class="waves-effect waves-light btn left" ng-init="desc=true" ng-click="sortByRating()">
+            Rating <i class="material-icons right">swap_vert</i>
+          </a>
+        </div>
+        <div class="col s6 right-align">
+          <!-- Dropdown Trigger -->
+          <a id="dropthis" class="dropdown-button btn" href="#" data-activates="dropdown1">Filter By</a>
+
+          <!-- Dropdown Structure -->
+          <ul id="dropdown1" class="dropdown-content">
+            <li ng-click="filterByRating(5)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterByRating(4)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterByRating(3)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterByRating(2)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterByRating(1)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="clear()"><a href="#!">
+              Clear
+            </a></li>
+          </ul>
+          <script type="text/javascript">
+            $('.dropdown-button').dropdown({
+              belowOrigin: true // Displays dropdown below the button
+            });
+          </script>
+        </div>
+      </div>
       <br>
 
       <!-- Result List -->
@@ -94,5 +139,6 @@
 
 
   </body>
+
   <br><br><br>
 </html>
