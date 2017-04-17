@@ -2,130 +2,97 @@
 <html>
   <head>
     <title><%= title %></title>
+    <!-- Stylesheets -->
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link type="text/css" rel="stylesheet" href="/bower_components/materialize/dist/css/materialize.min.css"  media="screen,projection"/>
-
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <!-- Scripts -->
     <script src="/bower_components/jquery/dist/jquery.min.js" charset="utf-8"></script>
     <script src="/bower_components/materialize/dist/js/materialize.min.js" charset="utf-8"></script>
-
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/bower_components/angular/angular.min.js" charset="utf-8"></script>
+    <script src="/bower_components/angularUtils-pagination/dirPagination.js" charset="utf-8"></script>
+    <!-- App -->
+    <script src="/app/app.js" charset="utf-8"></script>
+    <script src="/app/search.ctrl.js" charset="utf-8"></script>
+    <script src="/app/search.srvc.js" charset="utf-8"></script>
+    <!-- Font display -->
+    <style media="screen">
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+    </style>
   </head>
-  <body>
+
+  <br><br><br>
+
+  <body ng-app="SearchApp" ng-controller="SearchCtrl" ng-cloak>
     <!-- Title -->
     <div class="container">
-      <h4 class="center-align">Search Engine</h4>
+      <h3 class="center-align">Search Engine</h3>
+      <br>
     </div>
 
     <!-- Search Bar -->
     <div class="container">
       <nav>
         <div class="nav-wrapper">
-          <form class="teal">
+          <form class="teal" ng-submit="SearchTerm(input)" autocomplete="off">
             <div class="input-field">
-              <input id="search" type="search" required class="flow-text">
+              <input id="search" type="search" required ng-model="input" placeholder="Search something...">
               <label class="label-icon" for="search"><i class="material-icons">search</i></label>
               <i class="material-icons">close</i>
             </div>
           </form>
+          <div class="progress" ng-show="loading">
+              <div class="indeterminate"></div>
+          </div>
         </div>
       </nav>
     </div>
 
+
+
     <!-- Results -->
-    <div class="container">
+    <div class="container" ng-init="displayResults=false" ng-if="displayResults && results.length > 0">
       <blockquote class="result-label">
-        <h2 class="flow-text">Results</h2>
+        <h6 class="small">About {{results.length}} result(s) for <strong>{{input}}</strong></h6>
       </blockquote>
+      <a class="waves-effect waves-teal btn-flat" ng-init="desc=true" ng-click="sortByRating()">
+        Rating <i class="material-icons right">swap_vert</i>
+      </a>
+      <br>
 
       <!-- Result List -->
-      <div class="">
-        <table class="highlight">
-          <tbody>
-            <tr>
-              <div class="row">
-                <div class="col s12">
-                  <div class="card hoverable blue-grey lighten-5">
-                    <div class="card-content">
-                      <span class="card-title flow-text">
-                        Engaging.  Brutal, but engaging!
-                        <span class="badge">
-                          Rating:
-                          <i class="material-icons tiny  star">star</i>
-                          <i class="material-icons tiny  star">star</i>
-                          <i class="material-icons tiny  star">star</i>
-                          <i class="material-icons tiny  star">star</i>
-                        </span>
-                      </span>
-                      <p>
-                        <span class="condensed a-size-base review-text">Wow.  I was barely able to put this book down for a second after the first few pages got me completely hooked.  Suzanne Collins narrative here has an immediacy to it that, when combined with the very dramatic life-or-death plot, is incredibly compelling.  It's entertaining, and incredibly disturbing all at once.  If this was merely a good read, I would have given it 4 stars, but they say great art leaves you changed after you experience it...  and this book definitely did that.  Suzanne Collins has, with one amazing work, propelled herself onto my top shelf.<br/><br/>Parents, caveat emptor!  The storyline is brutal.  Even though the writing is geared for young adults, the main characters are teenagers, there's very little physical romance, and the actual violence would probably count as PG-13 nowadays...  it's probably one of the most terrifying books I've read in a very long time!  Right up there with George R.R. Martin, if not more so.  Remember what we learned from Jaws: you don't actually need to SEE the shark in order for it to be terrifying.  Sometimes not seeing the shark is even worse.<br/><br/>The story is basically about a teenager who is forced to compete in a 24-man-enter-1-man-leaves event.  I don't want to spoil it by saying any more, but if you liked The Running Man, you'll definitely like this.  And if you're young enough that you don't remember The Running Man, nor did you get the Thunderdome reference, then I'm just way too old.  But take an old fogey's advice and read this book.<br/><br/>Amazon, when can I preorder book 2???</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </tr>
-            <tr>
-              <div class="row">
-                <div class="col s12">
-                  <div class="card hoverable blue-grey lighten-5">
-                    <div class="card-content">
-                      <span class="card-title flow-text">
-                        Game on!
-                        <span class="badge">
-                          Rating:
-                          <i class="material-icons tiny star">star</i>
-                          <i class="material-icons tiny star">star</i>
-                          <i class="material-icons tiny star">star</i>
-                        </span>
-                      </span>
-                      <p>
-                        <span class="condensed a-size-base review-text">Clearly <a class="a-link-normal" href="/Gregor/dp/0439678137">Gregor</a> was merely the prelude. Suzanne Collins, you've been holding out on us, missy. As an author we were accustomed to your fun adventures involving a boy, his sister, and a world beneath our world. I think it's fair to say that we weren't really expecting something like The Hunger Games. At least I wasn't. But reading it gave me a horribly familiar feeling. There is a certain strain of book that can hypnotize you into believing that you are in another time and place roughly 2.3 seconds after you put that book down. <a class="a-link-normal" href="/Life-As-We-Knew-It/dp/0152061541">Life As We Knew It</a> by Susan Beth Pfeffer could convince me that there were simply not enough canned goods in my home. And The Hunger Games? Well as I walked down the street I was under the disctinc impression that there were hidden cameras everywhere, charting my progress home. Collins has written a book that is exciting, poignant, thoughtful, and breathtaking by turns. It ascends to the highest forms of the science fiction genre and will create all new fans for the writer. One of the best books of the 2008 year.<br/><br/>Life in District 12 isn't easy for Katniss and her family. Ever since her father died the girl has spent her time saving her mother and little sister Prim from starvation by hunting on forbidden land. But worst of all is reaping day. Once a year the government chooses two children from each of the twelve districts to compete against one another in a live and televised reality show. Twenty-four kids and teens enter, and only one survives. When Prim's name is called, Katniss exchanges herself without hesitation to compete alongside the baker's boy Peeta. To survive in this game you need to win the heart of your audience, and so District 12's trainers come up with a plan. Why not make it as if Peeta and Katniss were in love with one another? But in a game where only one person can live, Katniss will have to use all her brains, wits, and instincts to determine who to trust and how to outwit the game's creators.<br/><br/>I described the plot of this book to my husband, particularly the part where Katniss and Peeta fake being in love to gain the audience's approval and the very first thing he said was, "Oh! That's the plot of <a class="a-link-normal" href="/They-Shoot-Horses-Don-t-They/dp/185242401X">They Shoot Horses, Don't They?</a>" Then I mentioned that it took place in the future and that government leaders set up teenagers to fight one another to the death and he said, "<a class="a-link-normal" href="/Battle-Royale/dp/1427807531">Battle Royale</a>". So sure, there are parts of this plot that have been done before. You could say it's <a class="a-link-normal" href="/The-Game/dp/B000069HZP">The Game</a> meets <a class="a-link-normal" href="/Spartacus/dp/0783226039">Spartacus</a> with some <a class="a-link-normal" href="/Survivor/dp/B0001ZDKXI">Survivor</a> thrown in for spice. But that's not what makes a book good or bad, is it? Some of the greatest works of literature out there, regardless of the readerships' age, comes about when an author takes overdone or familiar themes and then makes them entirely new through the brilliance of their own writing. Harry Potter wouldn't have been any great shakes if it weren't for Rowling's storytelling. Similarly, Collins takes ideas that have certainly seen the light of day before and concocts an amazingly addictive text. About the time you get to the fifth chapter that ends with a sentence that forces you to read on, you're scratching your head wondering how the heck she DOES that.<br/><br/>Your story often rests on the shoulders of the protagonist. Is this a believable character? Do you root for him or her? Because basically it is a very hard thing to create a "good" person on the page that your reader is going to fall in love with. Because we readers know that we are flawed, we are often inclined to side with the similarly flawed people we meet between a book's covers. Katniss, on the other hand, is so good in so many ways. She sacrifices herself for her sister. She tries to save people in the game. But there's almost a jock mentality to her too. Katniss can figure out the puzzles and problems in the game, but when it comes to emotional complexity she's sometimes up a tree. Most remarkable to me was the fact that Katniss could walk around, oblivious to romance, and not bug me. Seriously, nothing gets under my skin faster than heroines who can't see that their fellow fellas are jonesing for them. You just want to bonk the ladies upside the head with a brick or something. The different here is maybe the fact that since Katniss knows that Peeta has to play a part, she uses that excuse (however unconsciously) to justify his seeming affection for her. Thems smart writing.<br/><br/>Oh! And did I mention the dialogue at all? The humor? Yep, there's humor. We're talking about a story where adolescents hunger for blood, and Katniss is getting in lines about her trainers like, "And then, because it's Effie and she's apparently required by law to say something awful..." Good stuff. The words pop off the page. And then there's the fact that we're dealing with a dystopian novel where the author has somehow managed to create a believable future. No faux slang here, or casual references to extinct dolphins. There are some animals that were scientifically altered, but you can't have a future without a couple cool details like that, right?<br/><br/>In general, this book throws a big fat wrench into the boy book/girl book view of child/teen literature. People love to characterize books by gender. It stars a boy? Boy book. A girl? Girl book. Now take a long lengthy look at the first book in the Hunger Games Trilogy. It stars a girl... and a boy too. There's a lot of hunting, fighting, and survival... and a lot of romance, kisses, and cool outfits. There's strategy, the world's most fabulous fashion designer, weapons and a girl who knows how to fight. This is not a book that quietly slots into our preconceived stereotypes. And you know what happens to books that span genders? They sell very well indeed. That is, if you can get both boys and girls to read them.<br/><br/>The age range? Well, for most of this story I would have said ten and up. I mean, yeah the basic premise is that a lot of teenagers go around killing one another, and sure there's some romance to deal with, but none of it really seems inappropriate... until a final death scene appears in the book. I won't give any details, but suffice it to say it is gruesome. There are definite horror elements to it as well, so with that in mind I am upping my recommendation to 12 and up. I'm sure that there are 10-year-olds out there who've seen much worse stuff on cable, just as there are 12-year-olds who'll freak out ten pages in. Still, I'm more comfortable recommending it for the older kids rather than the younger. You'll see why.<br/><br/>It occurs to me that there has never been a quintessential futuristic gladiator book for kids. That is undoubtedly the roughest term you can give this book. Now I'm not a person who cries easily when she reads something, particularly something for kids. Yet as I was taking a train to Long Island I found myself tearing up over significant parts of this story. It's good. And it's so ridiculous that a work of science fiction like this could even be so good. You think of futuristic arena tales and your mind instantly sinks to the lowest common denominator. What Collins has done here is set up a series that will sink its teeth into readers. The future of this book will go one of two ways. Either it will remain an unappreciated cult classic for years to come or it will be fully appreciated right from the start and lauded. My money lies with the latter. A contender in its own right.</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </tr>
-            <tr>
-              <div class="row">
-                <div class="col s12">
-                  <div class="card hoverable blue-grey lighten-5">
-                    <div class="card-content">
-                      <span class="card-title flow-text">
-                        Compelling premise, but not for the thoughtful reader
-                        <span class="badge">
-                          Rating:
-                          <i class="material-icons tiny star">star</i>
-                          <i class="material-icons tiny star">star</i>
-                          <i class="material-icons tiny star">star</i>
-                          <i class="material-icons tiny star">star</i>
-                          <i class="material-icons tiny star">star</i>
-                        </span>
-                      </span>
-                      <p>
-                        <span class="condensed a-size-base review-text">I'll be honest and say that I wanted to love this book. I was breathless with excitement when I downloaded it, and couldn't wait to start reading. With the rave reviews coming from almost everywhere I turned, right down to celebrities gushing their love for this series, I went into it with high hopes. The premise sounded fascinating. In fact, I'm pretty sure I turned to my husband and said the plot sounded "brilliant" when I first read a synopsis.<br/><br/>Brilliant, it was not. It was interesting, and I strained to stay awake late at night a couple of times just to read a few more pages. But for every moment of excitement, I felt an equal moment of letdown.<br/><br/>Let's face a few facts:<br/><br/>~ The main character, Katniss, is dull. She is thoroughly useful, to be sure, using her skills and determination to hunt outside the Seam to feed her family (and then to outwit opponents in the Hunger Games arena), but there is nothing about her that is riveting or even relatable. She seems almost void of feeling throughout most of the book, tossing aside emotions and flitting from one mental capacity to the next without much notice. I find it hard to believe that any human being could be horrified by the thought of killing their fellow Tribute one moment and then mesmerized by their own beautiful appearance the next. These dissonances make Katniss seem silly and almost irritating at times.<br/><br/>~ The writing style is frustrating. While I am all for the use of fragments to create drama and suspense, they are OVER-used in this book, to a point that is infuriating. I found myself irked within the first few paragraphs. Fragments for dramatic impact are one thing; fragments used repeatedly on every page are just insulting to the reader. I realize this is a young adult book, and I am above the intended audience age by a good decade or so. But even a teenager with average reading skills should find the continuous use of poor grammar to be unacceptable.<br/><br/>~ The premise, as a whole, lacks authenticity. In order to enjoy this book, you MUST accept everything at face value. You must accept that the people of Panem are so resigned to - or, in some cases, so engaged by - the barbarism that is the Hunger Games, they never question it. In fact, in seventy-four years, not even one Tribute has questioned the mandate that they must fight to the death in this arena, until Katniss Everdeen does. Not one parent has stepped forward and tried to stop this horrific massacre from occurring. Suzanne Collins wants you to accept that the Capitol is so powerful, so impenetrable, that the districts of Panem are held under its thumb as if by a powerful drug. And, really, wouldn't they have to be drugged to behave in such a fashion?<br/><br/>Without any expansion on the characters other than Katniss herself (and perhaps Peeta a little bit), the climax of the book does not reach its full potential. I would have liked to see a prologue or any type of flashback to a time before now, to get a more vivid sense of the evil that is the Capitol. The book lacks a tangible, detailed villain. That is my primary complaint. There is something to be said for a mysterious, menacing presence as a villain - as in Stephen King's "The Stand", for instance - but even in The Stand, the villain is eventually expanded upon to make him seem more real a threat.<br/><br/>The Hunger Games is a good book. It's interesting. It certainly keeps the reader at rapt attention. I think the violence is too much for a young adult novel, but it is also necessary to the premise. I just wish the author had given a little more thought to human nature and not expected her readers to so willingly submit to the plot without question. Perhaps she really believes this is a representation of human nature. Based on the number of rave reviewers who can't seem to find fault with the book in any way, perhaps she is right.</span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <ul class="collection">
+        <li class="collection-item" dir-paginate="item in results | itemsPerPage: 10">
+          <h5>{{ :: item.review }}</h5>
+          <blockquote>
+            <a href="https://www.amazon.com{{::item.link }}" target="_blank">Read on Amazon</a>
+          </blockquote>
+          <i class="material-icons tiny" ng-repeat="_ in ((_ = []) && (_.length=item.rating) && _) track by $index"
+            style="color:#f57f17">
+            star
+          </i>
+          <div ng-bind-html="sanitize(item.summary)">
+          </div>
+        </li>
+      </ul>
 
-      <!-- Pagination -->
-      <div class="container center-align">
-        <ul class="pagination">
-          <li class="waves-effect waves-teal"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-          <li class="waves-effect waves-teal"><a href="#!">1</a></li>
-          <li class="waves-effect waves-teal"><a href="#!">2</a></li>
-          <li class="waves-effect waves-teal"><a href="#!">3</a></li>
-          <li class="waves-effect waves-teal"><a href="#!">4</a></li>
-          <li class="waves-effect waves-teal"><a href="#!">5</a></li>
-          <li class="waves-effect waves-teal"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-        </ul>
+      <div class="container center">
+        <dir-pagination-controls on-page-change="scrollTop()"></dir-pagination-controls>
       </div>
     </div>
+
+    <!-- No results found -->
+    <div class="container" ng-if="displayResults && results.length == 0">
+      <p class="flow-text">
+        No results found for <strong>{{::input}}</strong>.
+      </p>
+    </div>
+
+
   </body>
+  <br><br><br>
 </html>
