@@ -2,7 +2,7 @@ var db = require(__dirname + '/../lib/mysql');
 
 exports.Search = function (req, res, next) {
   let searchQuery = req.params.searchQuery;
-  let sqlQuery = 'SELECT * FROM fiftyshadesofgrey where match(summary) against (?);';
+  let sqlQuery = 'SELECT * FROM reviews where match(review) against (?);';
 
   function action(err, rows) {
     if(err){
