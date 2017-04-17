@@ -112,15 +112,16 @@
       <!-- Result List -->
       <ul class="collection">
         <li class="collection-item" dir-paginate="item in results | itemsPerPage: 10">
-          <h5>{{ :: item.review }}</h5>
+          <h5>{{ :: item.review_title }}</h5>
           <blockquote>
-            <a href="https://www.amazon.com{{::item.link }}" target="_blank">Read on Amazon</a>
+            <span><em>{{::item.book_title}}</em> by {{::item.author}}</span><br>
+            <a href="https://www.amazon.com{{::item.link }}" target="_blank">Read review on Amazon</a>
           </blockquote>
           <i class="material-icons tiny" ng-repeat="_ in ((_ = []) && (_.length=item.rating) && _) track by $index"
             style="color:#f57f17">
             star
           </i>
-          <div ng-bind-html="sanitize(item.summary)">
+          <div ng-bind-html="sanitize(item.review)">
           </div>
         </li>
       </ul>
