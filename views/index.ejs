@@ -57,7 +57,7 @@
     <!-- Results -->
     <div class="container" ng-init="displayResults=false" ng-if="displayResults && results.length > 0">
       <blockquote class="result-label">
-        <h6 class="small">About {{results.length}} result(s) for <strong>{{input}}</strong></h6>
+        <h6 class="small">About {{results.length}} result(s) for <strong>{{::input}}</strong></h6>
       </blockquote>
       <div class="row">
         <div class="col s6 left-align">
@@ -67,36 +67,36 @@
         </div>
         <div class="col s6 right-align">
           <!-- Dropdown Trigger -->
-          <a id="dropthis" class="dropdown-button btn" href="#" data-activates="dropdown1">Filter By</a>
+          <a id="dropthis" ng-init="option='Filter by Rating'"class="dropdown-button btn" href="#" data-activates="dropdown1">{{option}}</a>
 
           <!-- Dropdown Structure -->
           <ul id="dropdown1" class="dropdown-content">
-            <li ng-click="filterByRating(5)"><a href="#!">
+            <li ng-click="filterByRating(5); option='5 stars'"><a href="#!">
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
             </a></li>
-            <li ng-click="filterByRating(4)"><a href="#!">
+            <li ng-click="filterByRating(4); option='4 stars'"><a href="#!">
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
             </a></li>
-            <li ng-click="filterByRating(3)"><a href="#!">
+            <li ng-click="filterByRating(3); option='3 stars'"><a href="#!">
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
             </a></li>
-            <li ng-click="filterByRating(2)"><a href="#!">
+            <li ng-click="filterByRating(2); option='2 stars'"><a href="#!">
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
             </a></li>
-            <li ng-click="filterByRating(1)"><a href="#!">
+            <li ng-click="filterByRating(1); option='1 star'"><a href="#!">
               <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
             </a></li>
-            <li ng-click="clear()"><a href="#!">
+            <li ng-click="clear(); option='Filter by Rating'"><a href="#!">
               Clear
             </a></li>
           </ul>
