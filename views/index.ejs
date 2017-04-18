@@ -55,7 +55,7 @@
 
 
     <!-- Results -->
-    <div class="container" ng-init="displayResults=false" ng-if="displayResults && results.length > 0">
+    <div class="container" ng-init="displayResults=false" ng-if="displayResults && orig.length > 0 ">
       <blockquote class="result-label">
         <h6 class="small">About {{results.length}} result(s) for <strong>{{::input}}</strong></h6>
       </blockquote>
@@ -65,39 +65,54 @@
             Rating <i class="material-icons right">swap_vert</i>
           </a>
         </div>
-        <div class="col s6 right-align">
+        <div class="col s6 right-align" >
           <!-- Dropdown Trigger -->
-          <a id="dropthis" ng-init="option='Filter by Rating'"class="dropdown-button btn" href="#" data-activates="dropdown1">{{option}}</a>
+          <a id="dropthis1" class="dropdown-button btn {{bookOption=='Filter by Book'?'grey':''}}" href="#" data-activates="dropdown2">
+            {{ bookOption }}
+          </a>
+          <!-- Dropdown Structure -->
+          <ul id="dropdown2" class="dropdown-content">
+            <li ng-click="clearBook()"><a href="#!" style="color: black;">
+              Clear
+            </a></li>
+            <li ng-repeat="b in books track by $index" ng-click="filterBook(b.book_title)"><a href="#!">
+              {{b.book_title}}
+            </a></li>
+          </ul>
+
+
+          <!-- Dropdown Trigger -->
+          <a id="dropthis" class="dropdown-button btn {{ratingOption=='Filter by Rating'?'grey':''}}" href="#" data-activates="dropdown1">{{ratingOption}}</a>
 
           <!-- Dropdown Structure -->
           <ul id="dropdown1" class="dropdown-content">
-            <li ng-click="filterByRating(5); option='5 stars'"><a href="#!">
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-            </a></li>
-            <li ng-click="filterByRating(4); option='4 stars'"><a href="#!">
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-            </a></li>
-            <li ng-click="filterByRating(3); option='3 stars'"><a href="#!">
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-            </a></li>
-            <li ng-click="filterByRating(2); option='2 stars'"><a href="#!">
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-            </a></li>
-            <li ng-click="filterByRating(1); option='1 star'"><a href="#!">
-              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
-            </a></li>
-            <li ng-click="clear(); option='Filter by Rating'"><a href="#!">
+            <li ng-click="clearRating()"><a href="#!" style="color:black;">
               Clear
+            </a></li>
+            <li ng-click="filterRating(5)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterRating(4)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterRating(3)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterRating(2)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
+            </a></li>
+            <li ng-click="filterRating(1)"><a href="#!">
+              <i class="material-icons" style="padding:0;margin:0;color:#f57f17;">star</i>
             </a></li>
           </ul>
           <script type="text/javascript">
@@ -132,9 +147,16 @@
     </div>
 
     <!-- No results found -->
-    <div class="container" ng-if="displayResults && results.length == 0">
+    <div class="container" ng-if="displayResults && orig.length == 0">
       <p class="flow-text">
         No results found for <strong>{{::input}}</strong>.
+      </p>
+    </div>
+
+    <!-- No results found based on filter -->
+    <div class="container" ng-if="displayResults && results.length == 0 && orig.length != 0">
+      <p class="flow-text">
+        No results found by current filter.
       </p>
     </div>
 

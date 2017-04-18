@@ -8,17 +8,30 @@
 
   function SearchCtrl($scope, $window, $timeout, $filter, $sce, $log, SearchSrvc) {
     angular.element('.dropdown-button').dropdown();
-
+    $scope.bookOption = 'Filter by Book';
+    $scope.ratingOption = 'Filter by Rating';
     $scope.results = [];
-    let orig = [];
+    $scope.orig = [];
+
+    let options = {
+      'book_title': '',
+      'rating': ''
+    };
 
     $scope.SearchTerm = function (query) {
       $scope.displayResults = false;
       $scope.loading = true;
+      $scope.bookOption = 'Filter by Book';
+      $scope.ratingOption = 'Filter by Rating';
+      options = {
+        'book_title': '',
+        'rating': ''
+      };
       SearchSrvc.Search(query)
         .then(function (results) {
-          $scope.results = results;
-          orig = results;
+          $scope.results = results.results;
+          $scope.books = results.books;
+          $scope.orig = results.results;
           $timeout(function () {
             $scope.desc = true;
             $scope.displayResults = true;
@@ -48,13 +61,35 @@
       $scope.desc = !$scope.desc;
     }
 
-    $scope.filterByRating = function (rate) {
-      $scope.results = $filter('filter')(orig, {'rating':rate});
+    $scope.filterBook = function (book) {
+      options.book_title = book.toString();
+      filter();
+      $scope.bookOption = ' ' + book + ' ';
     }
 
-    $scope.clear = function () {
-      $scope.results = orig;
+    $scope.filterRating = function (rate) {
+      options.rating = rate;
+      filter();
+      $scope.ratingOption = ' ' + rate + ' stars';
     }
+
+    $scope.clearBook = function () {
+      options.book_title = '';
+      filter();
+      $scope.bookOption = 'Filter by Book';
+    }
+
+    $scope.clearRating = function () {
+      options.rating = '';
+      filter();
+      $scope.ratingOption = 'Filter by Rating';
+    }
+
+    function filter() {
+      console.log(options);
+      $scope.results = $filter('filter')($scope.orig, options);
+    }
+
   }
 
 })();

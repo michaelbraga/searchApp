@@ -12,7 +12,21 @@ exports.Search = function (req, res, next) {
       });
     }
     else{
-      res.status(200).send(rows);
+      let bookQuery = 'SELECT DISTINCT book_title from reviews;';
+      db.query(bookQuery, function (err1, rows1) {
+
+        if(err1){
+          res.status(500).send({
+            'message':'Database error!',
+            'error': err1
+          });
+        } else {
+          res.status(200).send({
+            results: rows,
+            books: rows1
+          });
+        }
+      });
     }
   }
 
